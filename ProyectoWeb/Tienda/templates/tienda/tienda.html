@@ -1,0 +1,31 @@
+{% extends "ProyectoWebApp/base.html" %}
+{% block title %} Tienda {% endblock %}
+{% load static %}
+{% block content %}
+<div class="container text-center">
+    {% if request.user.is_authenticated %}
+        <div style="float: right; width: 5rem;">{% include "carrito/widget.html" %}</div>
+    {% else %}
+        <div class="alert alert-warning">Inicia sesión para activar el carrito</div>
+    {% endif %}
+    <div class="row row-cols-auto">
+        {% for producto in productos %}
+        <div class="col" style="margin: 1rem 2rem 1rem 0;">
+            <div class="card" style="width: 13rem;">
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Precio: {{ producto.precio }}</li>
+                    <li class="list-group-item">{% if producto.disponibilidad == True %} Disponible {% else %} No disponible {% endif %}</li>
+                </ul>
+                <div class="card-footer">
+                    <a href="{% url 'carrito:agregar' producto.id %}" class="btn btn-primary">Agregar al carrito</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
